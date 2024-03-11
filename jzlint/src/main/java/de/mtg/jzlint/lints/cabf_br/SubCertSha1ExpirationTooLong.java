@@ -20,9 +20,9 @@ import de.mtg.jzlint.utils.DateUtils;
 import de.mtg.jzlint.utils.Utils;
 
 /***************************************************************************************************************
- Effective 16 January 2015, CAs SHOULD NOT issue Subscriber Certificates utilizing the SHA‐1 algorithm with
+ Effective 16 January 2015, CAs SHOULD NOT issue Subscriber Certificates utilizing the SHA-1 algorithm with
  an Expiry Date greater than 1 January 2017 because Application Software Providers are in the process of
- deprecating and/or removing the SHA‐1 algorithm from their software, and they have communicated that
+ deprecating and/or removing the SHA-1 algorithm from their software, and they have communicated that
  CAs and Subscribers using such certificates do so at their own risk.
  ****************************************************************************************************************/
 

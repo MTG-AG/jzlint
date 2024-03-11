@@ -13,7 +13,7 @@ import de.mtg.jzlint.utils.Utils;
 
 @Lint(
         name = "e_adobe_extensions_strict_presence",
-        description = "Adobe Time‐stamp X509 extension (1.2.840.113583.1.1.9.1) and the Adobe ArchiveRevInfo extension (1.2.840.113583.1.1.9.2) are prohibited for strict SMIME certificates",
+        description = "Adobe Time-stamp X509 extension (1.2.840.113583.1.1.9.1) and the Adobe ArchiveRevInfo extension (1.2.840.113583.1.1.9.2) are prohibited for strict SMIME certificates",
         citation = "7.1.2.3.m",
         source = Source.CABF_SMIME_BASELINE_REQUIREMENTS,
         effectiveDate = EffectiveDate.SMIME_BR_1_0_DATE)

@@ -6,7 +6,7 @@ JZLint is a port of [ZLint](https://github.com/zmap/zlint) in Java.
 * To provide a more direct integration in the Java ecosystem.
 * To implement lints additionally to ZLint.
 
-JZLint is compatible with Java 8.
+JZLint is compatible with Java 17.
 
 ## Lints
 
@@ -58,6 +58,8 @@ JZLint implement several lints additionally to ZLint. This is the list of additi
 * e_smime_crldp_contains_uri_fullname
 * e_smime_ski_extension_critical
 * e_smime_subjectkeyidentifier_present
+* e_subject_rdns_correct_encoding
+* e_subject_rdns_maximum_length
 
 Additional lints are located in the subproject jlint-ext.
 

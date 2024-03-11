@@ -24,7 +24,7 @@ import de.mtg.jzlint.utils.Utils;
 
 @Lint(
         name = "e_ec_improper_curves",
-        description = "Only one of NIST P‐256, P‐384, or P‐521 can be used",
+        description = "Only one of NIST P-256, P-384, or P-521 can be used",
         citation = "BRs: 6.1.5",
         source = Source.CABF_BASELINE_REQUIREMENTS,
         // Refer to BRs: 6.1.5, taking the statement "Before 31 Dec 2010" literally

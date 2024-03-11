@@ -33,7 +33,7 @@ import de.mtg.jzlint.utils.Utils;
  * for the Domain Name MUST be in a single ordered
  * sequence containing all Domain Labels from the
  * Domain Name. The Domain Labels MUST be encoded
- * in the reverse order to the on‐wire representation of
+ * in the reverse order to the on-wire representation of
  * domain names in the DNS protocol, so that the Domain
  * Label closest to the root is encoded first. Multiple
  * instances MAY be present.

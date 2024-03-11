@@ -1,5 +1,6 @@
 package de.mtg.jzlint.lints.rfc;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import de.mtg.jzlint.LintTest;
@@ -41,8 +42,8 @@ class EcdsaEeInvalidKuTest {
             name = "n_ecdsa_ee_invalid_ku",
             filename = "CNWithoutSANSeptember2021.pem",
             expectedResultStatus = Status.NA)
+    @Disabled("This certificate cannot be parsed by bouncy castle.")
     void testCase05() {
     }
 
 }
-

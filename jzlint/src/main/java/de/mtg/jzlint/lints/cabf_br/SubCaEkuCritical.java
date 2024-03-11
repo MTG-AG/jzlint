@@ -15,9 +15,9 @@ import de.mtg.jzlint.utils.Utils;
 /************************************************
  BRs: 7.1.2.2g extkeyUsage (optional)
  For Subordinate CA Certificates to be Technically constrained in line with section 7.1.5, then either the value
- id‐kp‐serverAuth [RFC5280] or id‐kp‐clientAuth [RFC5280] or both values MUST be present**.
+ id-kp-serverAuth [RFC5280] or id-kp-clientAuth [RFC5280] or both values MUST be present.
  Other values MAY be present.
- If present, this extension SHOULD be marked non‐critical.
+ If present, this extension SHOULD be marked non-critical.
  ************************************************/
 
 @Lint(

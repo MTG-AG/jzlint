@@ -21,7 +21,7 @@ import de.mtg.jzlint.utils.Utils;
 /************************************************
  BRs: 7.1.4.2.2
  If present, this field MUST contain a single IP address
- or Fully‐Qualified Domain Name that is one of the values
+ or Fully-Qualified Domain Name that is one of the values
  contained in the Certificate’s subjectAltName extension (see Section 7.1.4.2.1).
  ************************************************/
 

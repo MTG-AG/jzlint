@@ -6,26 +6,24 @@
 
     <groupId>de.mtg</groupId>
     <artifactId>jzlint-ca</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <bcprov.version>1.77</bcprov.version>
-    </properties>
+    <parent>
+        <groupId>de.mtg</groupId>
+        <artifactId>jzlint-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
 
     <dependencies>
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
-            <version>${bcprov.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk18on</artifactId>
-            <version>${bcprov.version}</version>
         </dependency>
 
     </dependencies>

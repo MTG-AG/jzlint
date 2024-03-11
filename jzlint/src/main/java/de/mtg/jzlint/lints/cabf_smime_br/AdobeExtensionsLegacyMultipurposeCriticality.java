@@ -13,7 +13,7 @@ import de.mtg.jzlint.utils.Utils;
 
 @Lint(
         name = "e_adobe_extensions_legacy_multipurpose_criticality",
-        description = "If present, Adobe Time‐stamp X509 extension (1.2.840.113583.1.1.9.1) or the Adobe ArchiveRevInfo extension (1.2.840.113583.1.1.9.2) SHALL NOT be marked as critical for multipurpose/legacy SMIME certificates",
+        description = "If present, Adobe Time-stamp X509 extension (1.2.840.113583.1.1.9.1) or the Adobe ArchiveRevInfo extension (1.2.840.113583.1.1.9.2) SHALL NOT be marked as critical for multipurpose/legacy SMIME certificates",
         citation = "7.1.2.3.m",
         source = Source.CABF_SMIME_BASELINE_REQUIREMENTS,
         effectiveDate = EffectiveDate.SMIME_BR_1_0_DATE)

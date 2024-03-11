@@ -32,6 +32,7 @@ class PolicyQualifiersOtherThanCpsNotPermittedTest {
             filename = "policyQualifiersOtherThanCpsNotPermittedNotApplicable.pem",
             expectedResultStatus = Status.NA,
             certificateDescription = "Not Applicable")
+    @Disabled("This certificate cannot be parsed by Java/BouncyCastle")
     void testCase03() {
     }
 

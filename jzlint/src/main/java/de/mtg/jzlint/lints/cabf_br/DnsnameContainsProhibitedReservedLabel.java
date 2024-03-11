@@ -19,7 +19,7 @@ import de.mtg.jzlint.utils.Utils;
 
 @Lint(
         name = "e_dnsname_contains_prohibited_reserved_label",
-        description = "FQDNs MUST consist solely of Domain Labels that are P‐Labels or Non‐Reserved LDH Labels",
+        description = "FQDNs MUST consist solely of Domain Labels that are P-Labels or Non-Reserved LDH Labels",
         citation = "BRs: 7.1.4.2.1",
         source = Source.CABF_BASELINE_REQUIREMENTS,
         effectiveDate = EffectiveDate.NoReservedDomainLabelsDate)

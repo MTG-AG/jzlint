@@ -17,7 +17,7 @@ import de.mtg.jzlint.Status;
 
 /**************************************************************************************************
  BRs: 7.1.3
- SHA‐1 MAY be used with RSA keys in accordance with the criteria defined in Section 7.1.3.
+ SHA-1 MAY be used with RSA keys in accordance with the criteria defined in Section 7.1.3.
  **************************************************************************************************/
 
 @Lint(

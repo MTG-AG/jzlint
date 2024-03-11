@@ -21,7 +21,7 @@ import de.mtg.jzlint.utils.Utils;
  The modulus SHOULD also have the following
  characteristics: an odd number, not the power
  of a prime, and have no factors smaller than
- 752. [Citation: Section 5.3.3, NIST SP 800‐89].
+ 752. [Citation: Section 5.3.3, NIST SP 800-89].
  *******************************************************************************************************/
 
 @Lint(

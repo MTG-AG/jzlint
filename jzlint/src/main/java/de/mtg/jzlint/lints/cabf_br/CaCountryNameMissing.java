@@ -18,8 +18,8 @@ import de.mtg.jzlint.utils.Utils;
 /************************************************
  BRs: 7.1.2.1e
  The	Certificate	Subject	MUST contain the following:
- ‐	countryName	(OID 2.5.4.6).
- This field MUST	contain	the	two‐letter	ISO	3166‐1 country code	for	the country
+ -	countryName	(OID 2.5.4.6).
+ This field MUST	contain	the	two-letter	ISO	3166-1 country code	for	the country
  in which the CA’s place	of business	is located.
  ************************************************/
 
