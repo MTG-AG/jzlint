@@ -13,16 +13,16 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LintClassesContainer {
 
     public static final String PACKAGE_NAME = "de/mtg/jzlint/lints";
 
     private static LintClassesContainer lintClassesContainer;
-    private List<Class> lintClasses;
+    private List<Class<?>> lintClasses;
 
-    private LintClassesContainer(List<Class> lintClasses) {
+    private LintClassesContainer(List<Class<?>> lintClasses) {
         this.lintClasses = lintClasses;
     }
 
@@ -38,20 +38,20 @@ public class LintClassesContainer {
         return lintClassesContainer;
     }
 
-    public List<Class> getLintClasses() {
+    public List<Class<?>> getLintClasses() {
         return lintClasses;
     }
 
-    private static List<Class> getClasses(String packageName) throws IOException, ClassNotFoundException, URISyntaxException {
+    private static List<Class<?>> getClasses(String packageName) throws IOException, ClassNotFoundException, URISyntaxException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         URL urlResource = classLoader.getResource(packageName);
         URLConnection urlConnection = urlResource.openConnection();
 
-        List<Class> classes = new ArrayList<>();
+        List<Class<?>> classes = new ArrayList<>();
 
-        if (urlConnection instanceof JarURLConnection) {
-            Enumeration<JarEntry> entries = ((JarURLConnection) urlConnection).getJarFile().entries();
+        if (urlConnection instanceof JarURLConnection jarURLConnection) {
+            Enumeration<JarEntry> entries = jarURLConnection.getJarFile().entries();
 
             while (entries.hasMoreElements()) {
                 JarEntry jarEntry = entries.nextElement();
@@ -68,7 +68,9 @@ public class LintClassesContainer {
 
             while (resources.hasMoreElements()) {
                 URL resource = resources.nextElement();
-                Files.walk(Paths.get(resource.toURI())).filter(Files::isRegularFile).forEach(lintClassesCandidates::add);
+                try (Stream<Path> walk = Files.walk(Paths.get(resource.toURI()))) {
+                    walk.filter(Files::isRegularFile).forEach(lintClassesCandidates::add);
+                }
             }
 
             for (Path path : lintClassesCandidates) {
@@ -90,8 +92,8 @@ public class LintClassesContainer {
                 classes.add(Class.forName(stringBuilder.toString()));
             }
         }
-        Predicate<Class> lintAnnotationPresent = c -> c.isAnnotationPresent(Lint.class);
-        return classes.stream().filter(lintAnnotationPresent).collect(Collectors.toList());
+        Predicate<Class<?>> lintAnnotationPresent = c -> c.isAnnotationPresent(Lint.class);
+        return classes.stream().filter(lintAnnotationPresent).toList();
     }
 
 }

@@ -14,26 +14,20 @@ public class Runner {
     public static final String CHECK_APPLIES = "checkApplies";
     public static final String EXECUTE = "execute";
 
-
     public Runner() {
-
+        // empty
     }
 
     public LintJSONResults lint(X509Certificate certificate)
             throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
 
         LintClassesContainer lintClassesContainer = LintClassesContainer.getInstance();
-        List<Class> lintClasses = lintClassesContainer.getLintClasses();
+        List<Class<?>> lintClasses = lintClassesContainer.getLintClasses().stream().filter(cl -> cl.isAnnotationPresent(Lint.class)).toList();
 
         List<LintJSONResult> result = new ArrayList<>();
 
-        for (Class lintClass : lintClasses) {
-
-            if (!lintClass.isAnnotationPresent(Lint.class)) {
-                continue;
-            }
-
-            Lint lintAnnotation = (Lint) lintClass.getAnnotation(Lint.class);
+        for (Class<?> lintClass : lintClasses) {
+            Lint lintAnnotation = lintClass.getAnnotation(Lint.class);
             LintJSONResult lintResult = getLintResult(certificate, lintClass, lintAnnotation);
             if (lintResult != null) {
                 result.add(lintResult);
@@ -45,8 +39,8 @@ public class Runner {
 
     public LintJSONResult lintForClassName(X509Certificate certificate, String lintClassName)
             throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException {
-        Class lintClass = Class.forName(lintClassName);
-        Lint lintAnnotation = (Lint) lintClass.getAnnotation(Lint.class);
+        Class<?> lintClass = Class.forName(lintClassName);
+        Lint lintAnnotation = lintClass.getAnnotation(Lint.class);
         return getLintResult(certificate, lintClass, lintAnnotation);
     }
 
@@ -54,15 +48,10 @@ public class Runner {
             throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
 
         LintClassesContainer lintClassesContainer = LintClassesContainer.getInstance();
-        List<Class> lintClasses = lintClassesContainer.getLintClasses();
+        List<Class<?>> lintClasses = lintClassesContainer.getLintClasses().stream().filter(cl -> cl.isAnnotationPresent(Lint.class)).toList();
 
-        for (Class lintClass : lintClasses) {
-
-            if (!lintClass.isAnnotationPresent(Lint.class)) {
-                continue;
-            }
-
-            Lint lintAnnotation = (Lint) lintClass.getAnnotation(Lint.class);
+        for (Class<?> lintClass : lintClasses) {
+            Lint lintAnnotation = lintClass.getAnnotation(Lint.class);
             String name = lintAnnotation.name();
 
             // if lint name is present then run only this lint
@@ -75,11 +64,10 @@ public class Runner {
         return new LintJSONResult(lintName, Status.NA);
     }
 
-
     public LintJSONResult lintForClassName(X509CRL crl, String lintClassName)
             throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException, ClassNotFoundException {
-        Class lintClass = Class.forName(lintClassName);
-        Lint lintAnnotation = (Lint) lintClass.getAnnotation(Lint.class);
+        Class<?> lintClass = Class.forName(lintClassName);
+        Lint lintAnnotation = lintClass.getAnnotation(Lint.class);
         return getLintResult(crl, lintClass, lintAnnotation);
     }
 
@@ -87,15 +75,11 @@ public class Runner {
             throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
 
         LintClassesContainer lintClassesContainer = LintClassesContainer.getInstance();
-        List<Class> lintClasses = lintClassesContainer.getLintClasses();
+        List<Class<?>> lintClasses = lintClassesContainer.getLintClasses().stream().filter(cl -> cl.isAnnotationPresent(Lint.class)).toList();
 
-        for (Class lintClass : lintClasses) {
+        for (Class<?> lintClass : lintClasses) {
 
-            if (!lintClass.isAnnotationPresent(Lint.class)) {
-                continue;
-            }
-
-            Lint lintAnnotation = (Lint) lintClass.getAnnotation(Lint.class);
+            Lint lintAnnotation = lintClass.getAnnotation(Lint.class);
             String name = lintAnnotation.name();
 
             // if lint name is present then run only this lint
@@ -108,8 +92,7 @@ public class Runner {
         return new LintJSONResult(lintName, Status.NA);
     }
 
-
-    private LintJSONResult getLintResult(X509Certificate certificate, Class lintClass, Lint lintAnnotation)
+    private LintJSONResult getLintResult(X509Certificate certificate, Class<?> lintClass, Lint lintAnnotation)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         Method checkAppliesMethod;
@@ -119,7 +102,7 @@ public class Runner {
             return null;
         }
         Method executeMethod = lintClass.getMethod(EXECUTE, X509Certificate.class);
-        Object object = lintClass.newInstance();
+        Object object = lintClass.getDeclaredConstructor().newInstance();
 
         boolean checkApplies = (boolean) checkAppliesMethod.invoke(object, certificate);
 
@@ -129,10 +112,9 @@ public class Runner {
                 return new LintJSONResult(lintAnnotation.name(), Status.NE);
             }
 
-            if (IneffectiveDate.EMPTY != lintAnnotation.ineffectiveDate()) {
-                if (DateUtils.isIssuedOnOrAfter(certificate, lintAnnotation.ineffectiveDate().getZonedDateTime())) {
-                    return new LintJSONResult(lintAnnotation.name(), Status.NE);
-                }
+            if (IneffectiveDate.EMPTY != lintAnnotation.ineffectiveDate() &&
+                    DateUtils.isIssuedOnOrAfter(certificate, lintAnnotation.ineffectiveDate().getZonedDateTime())) {
+                return new LintJSONResult(lintAnnotation.name(), Status.NE);
             }
 
             LintResult lintResult = (LintResult) executeMethod.invoke(object, certificate);
@@ -142,12 +124,11 @@ public class Runner {
         }
     }
 
-
-    private LintJSONResult getLintResult(X509CRL crl, Class lintClass, Lint lintAnnotation)
+    private LintJSONResult getLintResult(X509CRL crl, Class<?> lintClass, Lint lintAnnotation)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Method checkAppliesMethod = lintClass.getMethod(CHECK_APPLIES, X509CRL.class);
         Method executeMethod = lintClass.getMethod(EXECUTE, X509CRL.class);
-        Object object = lintClass.newInstance();
+        Object object = lintClass.getDeclaredConstructor().newInstance();
 
         boolean checkApplies = (boolean) checkAppliesMethod.invoke(object, crl);
 
@@ -157,10 +138,9 @@ public class Runner {
                 return new LintJSONResult(lintAnnotation.name(), Status.NE);
             }
 
-            if (IneffectiveDate.EMPTY != lintAnnotation.ineffectiveDate()) {
-                if (DateUtils.isIssuedOnOrAfter(crl, lintAnnotation.ineffectiveDate().getZonedDateTime())) {
-                    return new LintJSONResult(lintAnnotation.name(), Status.NE);
-                }
+            if (IneffectiveDate.EMPTY != lintAnnotation.ineffectiveDate() &&
+                    DateUtils.isIssuedOnOrAfter(crl, lintAnnotation.ineffectiveDate().getZonedDateTime())) {
+                return new LintJSONResult(lintAnnotation.name(), Status.NE);
             }
 
             LintResult lintResult = (LintResult) executeMethod.invoke(object, crl);
