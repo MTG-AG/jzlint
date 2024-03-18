@@ -20,7 +20,7 @@ public class LintClassesContainer {
     public static final String PACKAGE_NAME = "de/mtg/jzlint/lints";
 
     private static LintClassesContainer lintClassesContainer;
-    private List<Class<?>> lintClasses;
+    private final List<Class<?>> lintClasses;
 
     private LintClassesContainer(List<Class<?>> lintClasses) {
         this.lintClasses = lintClasses;
