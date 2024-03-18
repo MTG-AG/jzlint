@@ -1,4 +1,4 @@
-package de.mtg.jzlint.sap;
+package de.mtg.jzlint.ca;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -30,7 +30,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-public class CreateCert {
+public class CreateCertificate006 {
 
     public static final String SUB_SUBJECT_DN = "CN=JLint Sub CA";
     public static final String ROOT_SUBJECT_DN = "CN=JLint Root CA";
