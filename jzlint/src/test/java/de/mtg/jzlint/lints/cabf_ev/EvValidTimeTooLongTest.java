@@ -32,4 +32,13 @@ class EvValidTimeTooLongTest {
             certificateDescription = "EV certificate issued after Ballot 193, valid for 825 days, which is >27 months")
     void testCase03() {
     }
+
+    @LintTest(
+            name = "e_ev_valid_time_too_long",
+            filename = "27monthsEv.pem",
+            expectedResultStatus = Status.PASS,
+            certificateDescription = "EV certificate issued after Ballot 193, valid for 825 days, which is >27 months")
+    void testCase04() {
+    }
+
 }
