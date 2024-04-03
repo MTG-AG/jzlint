@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
+import java.util.stream.Collectors;
 
 public class LintClassesContainer {
 
@@ -102,7 +103,7 @@ public class LintClassesContainer {
             }
         }
         Predicate<Class<?>> lintAnnotationPresent = c -> c.isAnnotationPresent(Lint.class);
-        return classes.stream().filter(lintAnnotationPresent).toList();
+        return classes.stream().filter(lintAnnotationPresent).collect(Collectors.toList());
     }
 
 }
