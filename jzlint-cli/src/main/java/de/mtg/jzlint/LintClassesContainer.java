@@ -13,7 +13,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
-import java.util.stream.Collectors;
 
 public class LintClassesContainer {
 
@@ -23,9 +22,9 @@ public class LintClassesContainer {
     public static final String JLINT_ISSUER_PACKAGE_NAME = "de/mtg/jlintissuer/lints";
 
     private static LintClassesContainer lintClassesContainer;
-    private List<Class> lintClasses;
+    private List<Class<?>> lintClasses;
 
-    private LintClassesContainer(List<Class> lintClasses) {
+    private LintClassesContainer(List<Class<?>> lintClasses) {
         this.lintClasses = lintClasses;
     }
 
@@ -33,10 +32,10 @@ public class LintClassesContainer {
 
         if (lintClassesContainer == null) {
             try {
-                List<Class> jzLintClasses = getClasses(JZLINT_PACKAGE_NAME);
-                List<Class> jLintExtClasses = getClasses(JLINT_EXT_PACKAGE_NAME);
-                List<Class> jLintIssuerClasses = getClasses(JLINT_ISSUER_PACKAGE_NAME);
-                List<Class> jLintOCSPClasses = getClasses(JLINT_OCPS_PACKAGE_NAME);
+                List<Class<?>> jzLintClasses = getClasses(JZLINT_PACKAGE_NAME);
+                List<Class<?>> jLintExtClasses = getClasses(JLINT_EXT_PACKAGE_NAME);
+                List<Class<?>> jLintIssuerClasses = getClasses(JLINT_ISSUER_PACKAGE_NAME);
+                List<Class<?>> jLintOCSPClasses = getClasses(JLINT_OCPS_PACKAGE_NAME);
 
                 jzLintClasses.addAll(jLintExtClasses);
                 jzLintClasses.addAll(jLintIssuerClasses);
@@ -50,17 +49,17 @@ public class LintClassesContainer {
         return lintClassesContainer;
     }
 
-    public List<Class> getLintClasses() {
+    public List<Class<?>> getLintClasses() {
         return lintClasses;
     }
 
-    private static List<Class> getClasses(String packageName) throws IOException, ClassNotFoundException, URISyntaxException {
+    private static List<Class<?>> getClasses(String packageName) throws IOException, ClassNotFoundException, URISyntaxException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         URL urlResource = classLoader.getResource(packageName);
         URLConnection urlConnection = urlResource.openConnection();
 
-        List<Class> classes = new ArrayList<>();
+        List<Class<?>> classes = new ArrayList<>();
 
         if (urlConnection instanceof JarURLConnection) {
             Enumeration<JarEntry> entries = ((JarURLConnection) urlConnection).getJarFile().entries();
@@ -102,8 +101,8 @@ public class LintClassesContainer {
                 classes.add(Class.forName(stringBuilder.toString()));
             }
         }
-        Predicate<Class> lintAnnotationPresent = c -> c.isAnnotationPresent(Lint.class);
-        return classes.stream().filter(lintAnnotationPresent).collect(Collectors.toList());
+        Predicate<Class<?>> lintAnnotationPresent = c -> c.isAnnotationPresent(Lint.class);
+        return classes.stream().filter(lintAnnotationPresent).toList();
     }
 
 }

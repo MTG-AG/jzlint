@@ -43,11 +43,14 @@ public class JZLintCli implements Callable<Integer> {
     @CommandLine.Option(arity = "0..1", names = {"-includeNames"}, split = ",", description = "Comma-separated names of the lints to use.")
     private List<String> includeNames = new ArrayList<>();
 
-    @CommandLine.Option(arity = "0..1", names = {"-excludeSources"}, split = ",", description = "Comma-separated name of the sources to exclude")
+    @CommandLine.Option(arity = "0..1", names = {"-excludeSources"}, split = ",", description = "Comma-separated name of the sources to exclude.")
     private List<String> excludeSources = new ArrayList<>();
 
-    @CommandLine.Option(arity = "0..1", names = {"-includeSources"}, split = ",", description = "Comma-separated name of the sources to include")
+    @CommandLine.Option(arity = "0..1", names = {"-includeSources"}, split = ",", description = "Comma-separated name of the sources to include.")
     private List<String> includeSources = new ArrayList<>();
+
+    @CommandLine.Option(arity = "0..1", names = {"-excludeNames"}, split = ",", description = "Comma-separated names of the lints to exclude.")
+    private List<String> excludeNames = new ArrayList<>();
 
     @CommandLine.Option(arity = "0..1", names = "-p", description = "A pretty output format")
     private boolean pretty;
@@ -61,7 +64,7 @@ public class JZLintCli implements Callable<Integer> {
             rawIssuer = Files.readAllBytes(issuer.get().toPath());
         }
 
-        LintJSONResults lintResult = lint(rawPKIObject, rawIssuer, includeNames, includeSources, excludeSources);
+        LintJSONResults lintResult = lint(rawPKIObject, rawIssuer, includeNames, includeSources, excludeSources, excludeNames);
 
         if (pretty) {
             System.out.println(lintResult.getResultPrettyString());
@@ -106,13 +109,16 @@ public class JZLintCli implements Callable<Integer> {
         }
     }
 
-    private static LintJSONResults lint(byte[] pkiObject, byte[] issuer,
-                                        List<String> includeNames,
-                                        List<String> includeSources,
-                                        List<String> excludeSources) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    private static LintJSONResults lint(
+            byte[] pkiObject,
+            byte[] issuer,
+            List<String> includeNames,
+            List<String> includeSources,
+            List<String> excludeSources,
+            List<String> excludeNames) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
 
         LintClassesContainer lintClassesContainer = LintClassesContainer.getInstance();
-        List<Class> lintClasses = lintClassesContainer.getLintClasses();
+        List<Class<?>> lintClasses = lintClassesContainer.getLintClasses();
 
         List<LintJSONResult> result = new ArrayList<>();
 
@@ -121,20 +127,22 @@ public class JZLintCli implements Callable<Integer> {
         boolean isCRL = getCRL(pkiObject) != null;
         boolean isOCSP = getOCSPResponse(pkiObject) != null;
 
-        for (Class lintClass : lintClasses) {
+        for (Class<?> lintClass : lintClasses) {
 
             if (!lintClass.isAnnotationPresent(Lint.class)) {
                 continue;
             }
 
-            Lint lintAnnotation = (Lint) lintClass.getAnnotation(Lint.class);
+            Lint lintAnnotation = lintClass.getAnnotation(Lint.class);
 
             String lintName = lintAnnotation.name();
 
-            if (includeNames != null && !includeNames.isEmpty()) {
-                if (!includeNames.contains(lintName)) {
-                    continue;
-                }
+            if (includeNames != null && !includeNames.isEmpty() && !includeNames.contains(lintName)) {
+                continue;
+            }
+
+            if (excludeNames != null && !excludeNames.isEmpty() && excludeNames.contains(lintName)) {
+                continue;
             }
 
             Source source = lintAnnotation.source();
@@ -168,7 +176,7 @@ public class JZLintCli implements Callable<Integer> {
 
             if (isOCSP) {
                 ZonedDateTime time = DateUtils.getProducedAt(OCSPResponse.getInstance(pkiObject));
-                if (hasIssuer && isOCSPResponseIssuerLint && isOCSP) {
+                if (hasIssuer && isOCSPResponseIssuerLint) {
                     result.add(getLintResult(pkiObject, getCertificate(issuer), time, byte[].class, lintClass, lintAnnotation));
                 } else if (CliUtils.isOCSPResponseLint(lintClass)) {
                     result.add(getLintResult(pkiObject, null, time, byte[].class, lintClass, lintAnnotation));
@@ -180,12 +188,13 @@ public class JZLintCli implements Callable<Integer> {
     }
 
 
-    private static LintJSONResult getLintResult(Object pkiObject,
-                                                X509Certificate issuer,
-                                                ZonedDateTime time,
-                                                Class pkiObjectClass,
-                                                Class lintClass,
-                                                Lint lintAnnotation) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    private static LintJSONResult getLintResult(
+            Object pkiObject,
+            X509Certificate issuer,
+            ZonedDateTime time,
+            Class<?> pkiObjectClass,
+            Class<?> lintClass,
+            Lint lintAnnotation) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         Method checkAppliesMethod;
         Method executeMethod;
@@ -197,7 +206,7 @@ public class JZLintCli implements Callable<Integer> {
             executeMethod = lintClass.getMethod(CliUtils.EXECUTE, pkiObjectClass, issuer.getClass());
         }
 
-        Object object = lintClass.newInstance();
+        Object object = lintClass.getDeclaredConstructor().newInstance();
 
         boolean checkApplies;
         if (issuer == null) {
@@ -214,10 +223,9 @@ public class JZLintCli implements Callable<Integer> {
             return new LintJSONResult(lintAnnotation.name(), Status.NE);
         }
 
-        if (IneffectiveDate.EMPTY != lintAnnotation.ineffectiveDate()) {
-            if (DateUtils.isIssuedOnOrAfter(time, lintAnnotation.ineffectiveDate().getZonedDateTime())) {
-                return new LintJSONResult(lintAnnotation.name(), Status.NE);
-            }
+        if (IneffectiveDate.EMPTY != lintAnnotation.ineffectiveDate() &&
+                DateUtils.isIssuedOnOrAfter(time, lintAnnotation.ineffectiveDate().getZonedDateTime())) {
+            return new LintJSONResult(lintAnnotation.name(), Status.NE);
         }
 
         LintResult lintResult;
