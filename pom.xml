@@ -55,11 +55,12 @@
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
 
         <bcprov.version>1.77</bcprov.version>
         <picocli.version>4.7.5</picocli.version>
