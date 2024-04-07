@@ -5,6 +5,7 @@ import java.security.interfaces.DSAParams;
 import java.security.interfaces.DSAPublicKey;
 
 import de.mtg.jzlint.EffectiveDate;
+import de.mtg.jzlint.IneffectiveDate;
 import de.mtg.jzlint.JavaLint;
 import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
@@ -18,7 +19,8 @@ import de.mtg.jzlint.utils.Utils;
         citation = "BRs v1.7.0: 6.1.5",
 // Refer to BRs: 6.1.5, taking the statement "Before 31 Dec 2010" literally
         source = Source.CABF_BASELINE_REQUIREMENTS,
-        effectiveDate = EffectiveDate.ZERO)
+        effectiveDate = EffectiveDate.ZERO,
+        ineffectiveDate = IneffectiveDate.CABFBRs_1_7_1_Date)
 public class DsaShorterThan2048Bits implements JavaLint {
 
     @Override
