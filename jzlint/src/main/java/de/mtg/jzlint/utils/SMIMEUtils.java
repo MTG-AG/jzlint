@@ -76,6 +76,12 @@ public final class SMIMEUtils {
             SPONSOR_VALIDATED_STRICT
     );
 
+    private static final List<String> INDIVIDUAL_VALIDATED_OIDS = Arrays.asList(
+            INDIVIDUAL_VALIDATED_LEGACY,
+            INDIVIDUAL_VALIDATED_MULTIPURPOSE,
+            INDIVIDUAL_VALIDATED_STRICT
+    );
+
     private static final Function<PolicyInformation, String> getOID = p -> p.getPolicyIdentifier().getId();
 
     // taken from https://www.baeldung.com/java-email-validation-regex
@@ -184,6 +190,19 @@ public final class SMIMEUtils {
         CertificatePolicies certificatePolicies = CertificatePolicies.getInstance(value);
         Predicate<PolicyInformation> isSponsorValidatedPolicy = p -> SPONSOR_VALIDATED_OIDS.contains(getOID.apply(p));
         return Arrays.stream(certificatePolicies.getPolicyInformation()).anyMatch(isSponsorValidatedPolicy);
+    }
+
+    public static boolean isIndividualValidatedCertificate(X509Certificate certificate) {
+        byte[] rawCertificatePolicies = certificate.getExtensionValue(Extension.certificatePolicies.getId());
+
+        if (rawCertificatePolicies == null) {
+            return false;
+        }
+
+        byte[] value = ASN1OctetString.getInstance(rawCertificatePolicies).getOctets();
+        CertificatePolicies certificatePolicies = CertificatePolicies.getInstance(value);
+        Predicate<PolicyInformation> isIndividualValidatedPolicy = p -> INDIVIDUAL_VALIDATED_OIDS.contains(getOID.apply(p));
+        return Arrays.stream(certificatePolicies.getPolicyInformation()).anyMatch(isIndividualValidatedPolicy);
     }
 
     public static boolean isValidEmailAddress(String candidate) {
