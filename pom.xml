@@ -6,7 +6,7 @@
 
     <groupId>de.mtg</groupId>
     <artifactId>jzlint-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>jzlint-parent</name>
     <packaging>pom</packaging>
 
@@ -43,10 +43,13 @@
     </scm>
 
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/MTG-AG/jzlint</url>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
@@ -112,6 +115,7 @@
                 <artifactId>jzlint</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>de.mtg</groupId>
                 <artifactId>jlint-ext</artifactId>
@@ -123,6 +127,7 @@
                 <artifactId>jlint-issuer</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>de.mtg</groupId>
                 <artifactId>jlint-ocsp</artifactId>
