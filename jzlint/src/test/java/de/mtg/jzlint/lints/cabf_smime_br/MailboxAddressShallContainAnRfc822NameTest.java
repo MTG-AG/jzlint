@@ -28,16 +28,16 @@ class MailboxAddressShallContainAnRfc822NameTest {
     @LintTest(
             name = "e_mailbox_address_shall_contain_an_rfc822_name",
             filename = "smime/MailboxAddressFromSAN/WithOnlySANEmail.pem",
-            expectedResultStatus = Status.PASS,
-            certificateDescription = "pass - only contains one san:emailAddress value")
+            expectedResultStatus = Status.NA,
+            certificateDescription = "na - only contains one san:emailAddress value")
     void testCase03() {
     }
 
     @LintTest(
             name = "e_mailbox_address_shall_contain_an_rfc822_name",
             filename = "smime/MailboxAddressFromSAN/WithOnlySANOtherName.pem",
-            expectedResultStatus = Status.PASS,
-            certificateDescription = "pass - only contains one san:otherName value")
+            expectedResultStatus = Status.NA,
+            certificateDescription = "na - only contains one san:otherName value")
     void testCase04() {
     }
 
@@ -92,8 +92,8 @@ class MailboxAddressShallContainAnRfc822NameTest {
     @LintTest(
             name = "e_mailbox_address_shall_contain_an_rfc822_name",
             filename = "smime/MailboxAddressFromSAN/sponsorValidatedMultipurposePersonalNameInCN.pem",
-            expectedResultStatus = Status.PASS,
-            certificateDescription = "pass - subject:commonName is personal name, san:emailAddress contains an email")
+            expectedResultStatus = Status.NA,
+            certificateDescription = "na - subject:commonName is personal name, san:emailAddress contains an email")
     void testCase11() {
     }
 
