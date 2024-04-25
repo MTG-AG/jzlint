@@ -6,7 +6,7 @@
 
     <groupId>de.mtg</groupId>
     <artifactId>jzlint-ca</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -15,7 +15,7 @@
     <parent>
         <groupId>de.mtg</groupId>
         <artifactId>jzlint-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <dependencies>
