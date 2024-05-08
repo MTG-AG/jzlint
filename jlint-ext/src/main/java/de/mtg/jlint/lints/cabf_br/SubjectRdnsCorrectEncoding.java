@@ -23,25 +23,6 @@ import de.mtg.jzlint.utils.Utils;
  * CAs that include attributes in the Certificate subject field that are listed in the table below
  * SHALL encode those attributes in the relative order as they appear in the table and follow the
  * specified encoding requirements for the attribute.
- *
- * <table>
- *   <thead>
- *     <tr><th>Attribute</th><th>Encoding Requirements</th><th>Max Length</th></tr>
- *   <thead>
- *   <tbody>
- *      <tr><td>domainComponent</td><td>MUST use IA5String</td><td>63</td></tr>
- *      <tr><td>countryName</td><td>MUST use PrintableString</td><td>2</td></tr>
- *      <tr><td>stateOrProvinceName</td><td>MUST use UTF8String or PrintableString</td><td>128</td></tr>
- *      <tr><td>localityName</td><td>MUST use UTF8String or PrintableString</td><td>128</td></tr>
- *      <tr><td>postalCode</td><td>MUST use UTF8String or PrintableString</td><td>40</td></tr>
- *      <tr><td>streetAddress</td><td>MUST use UTF8String or PrintableString</td><td>128</td></tr>
- *      <tr><td>organizationName</td><td>MUST use UTF8String or PrintableString</td><td>64</td></tr>
- *      <tr><td>surname</td><td>MUST use UTF8String or PrintableString</td><td>64</td></tr>
- *      <tr><td>givenName</td><td>MUST use UTF8String or PrintableString</td><td>64</td></tr>
- *      <tr><td>organizationalUnitName</td><td>MUST use UTF8String or PrintableString</td><td>64</td></tr>
- *      <tr><td>commonName</td><td>MUST use UTF8String or PrintableString</td><td>64</td></tr>
- *   </tbody>
- * </table>
  */
 @Lint(
         name = "e_subject_rdns_correct_encoding",

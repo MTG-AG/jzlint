@@ -23,8 +23,8 @@ import de.mtg.jzlint.utils.Utils;
  rfc822Name is a "Mailbox" as defined in Section 4.1.2 of [RFC2821].
  A Mailbox has the form "Local-part@Domain".  Note that a Mailbox has
  no phrase (such as a common name) before it, has no comment (text
- surrounded in parentheses) after it, and is not surrounded by "<" and
- ">".  Rules for encoding Internet mail addresses that include
+ surrounded in parentheses) after it, and is not surrounded by "{@literal <}" and
+ "{@literal >}".  Rules for encoding Internet mail addresses that include
  internationalized domain names are specified in Section 7.5.
  ************************************************************************/
 

@@ -13,9 +13,8 @@ import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
 import de.mtg.jzlint.utils.Utils;
 
-
 /*************************************************************************
- RFC 5280: 4.2 & 4.2.1.6
+ RFC 5280: 4.2 {@literal &} 4.2.1.6
  Further, if the only subject identity included in the certificate is
  an alternative name form (e.g., an electronic mail address), then the
  subject distinguished name MUST be empty (an empty sequence), and the
