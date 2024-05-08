@@ -113,7 +113,6 @@
                     <executions>
                         <execution>
                             <id>attach-sources</id>
-                            <phase>verify</phase>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
@@ -125,10 +124,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${maven-javadoc-plugin.version}</version>
+                    <configuration>
+                        <additionalOptions>-Xdoclint:all -Xdoclint:-missing</additionalOptions>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>attach-javadocs</id>
-                            <phase>verify</phase>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
@@ -143,34 +144,26 @@
         <profile>
             <id>release</id>
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-gpg-plugin</artifactId>
-                            <version>${maven-gpg-plugin.version}</version>
-                            <executions>
-                                <execution>
-                                    <id>sign-artifacts</id>
-                                    <phase>verify</phase>
-                                    <goals>
-                                        <goal>sign</goal>
-                                    </goals>
-                                    <configuration>
-                                        <gpgArguments>
-                                            <arg>--pinentry-mode</arg>
-                                            <arg>loopback</arg>
-                                        </gpgArguments>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
