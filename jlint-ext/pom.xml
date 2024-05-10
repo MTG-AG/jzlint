@@ -47,6 +47,7 @@
         <dependency>
             <groupId>de.mtg</groupId>
             <artifactId>jzlint</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
