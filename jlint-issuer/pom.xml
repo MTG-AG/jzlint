@@ -6,7 +6,7 @@
 
     <groupId>de.mtg</groupId>
     <artifactId>jlint-issuer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>Lints for certificates and revocation lists in combination with their issuer.</description>
     <url>https://github.com/MTG-AG/jzlint</url>
     <organization>
@@ -17,7 +17,7 @@
     <parent>
         <groupId>de.mtg</groupId>
         <artifactId>jzlint-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <licenses>
