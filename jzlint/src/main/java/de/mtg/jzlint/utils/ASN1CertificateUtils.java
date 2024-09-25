@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bouncycastle.asn1.ASN1BitString;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1GeneralizedTime;
@@ -14,6 +15,7 @@ import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.util.encoders.Base64;
 
 public final class ASN1CertificateUtils {
 
@@ -127,6 +129,16 @@ public final class ASN1CertificateUtils {
     public static ASN1Sequence getPublicKeyAlgorithmIdentifier(X509Certificate certificate) throws CertificateEncodingException {
         ASN1Sequence publicKey = ASN1CertificateUtils.getPublicKey(certificate);
         return (ASN1Sequence) publicKey.getObjectAt(0);
+    }
+
+    public static byte[] getPublicKeySubjectPublicKey(X509Certificate certificate) throws CertificateEncodingException {
+        ASN1Sequence publicKey = ASN1CertificateUtils.getPublicKey(certificate);
+        ASN1BitString subjectPublicKey = (ASN1BitString) publicKey.getObjectAt(1);
+        return subjectPublicKey.getOctets();
+    }
+
+    public static String getPublicKeySubjectPublicKeyBase64Encoded(X509Certificate certificate) throws CertificateEncodingException {
+        return new String(Base64.encode(getPublicKeySubjectPublicKey(certificate)));
     }
 
     public static ASN1Encodable getSubject(X509Certificate certificate) throws CertificateEncodingException {
