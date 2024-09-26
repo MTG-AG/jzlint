@@ -6,7 +6,7 @@
 
     <groupId>de.mtg</groupId>
     <artifactId>jzlint-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <name>jzlint-parent</name>
     <packaging>pom</packaging>
 
