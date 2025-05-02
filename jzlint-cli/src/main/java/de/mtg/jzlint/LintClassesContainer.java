@@ -19,8 +19,9 @@ public class LintClassesContainer {
 
     public static final String JZLINT_PACKAGE_NAME = "de/mtg/jzlint/lints";
     public static final String JLINT_EXT_PACKAGE_NAME = "de/mtg/jlint/lints";
-    public static final String JLINT_OCPS_PACKAGE_NAME = "de/mtg/jlintocsp/lints";
+    public static final String JLINT_OCSP_PACKAGE_NAME = "de/mtg/jlintocsp/lints";
     public static final String JLINT_ISSUER_PACKAGE_NAME = "de/mtg/jlintissuer/lints";
+    public static final String JLINT_PQC_PACKAGE_NAME = "de/mtg/jlint/pqc/lints";
 
     private static LintClassesContainer lintClassesContainer;
     private List<Class<?>> lintClasses;
@@ -36,11 +37,13 @@ public class LintClassesContainer {
                 List<Class<?>> jzLintClasses = getClasses(JZLINT_PACKAGE_NAME);
                 List<Class<?>> jLintExtClasses = getClasses(JLINT_EXT_PACKAGE_NAME);
                 List<Class<?>> jLintIssuerClasses = getClasses(JLINT_ISSUER_PACKAGE_NAME);
-                List<Class<?>> jLintOCSPClasses = getClasses(JLINT_OCPS_PACKAGE_NAME);
+                List<Class<?>> jLintOCSPClasses = getClasses(JLINT_OCSP_PACKAGE_NAME);
+                List<Class<?>> jLintPQCClasses = getClasses(JLINT_PQC_PACKAGE_NAME);
 
                 jzLintClasses.addAll(jLintExtClasses);
                 jzLintClasses.addAll(jLintIssuerClasses);
                 jzLintClasses.addAll(jLintOCSPClasses);
+                jzLintClasses.addAll(jLintPQCClasses);
                 lintClassesContainer = new LintClassesContainer(jzLintClasses);
             } catch (ClassNotFoundException | URISyntaxException | IOException ex) {
                 throw new RuntimeException(ex);

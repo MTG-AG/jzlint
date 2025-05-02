@@ -85,6 +85,12 @@
         </dependency>
 
         <dependency>
+            <groupId>de.mtg</groupId>
+            <artifactId>jlint-pqc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
             <version>${bcprov.version}</version>

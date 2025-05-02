@@ -35,8 +35,8 @@ public class RsaFermatFactorization implements JavaLint {
         for (int i = 0; i < rounds; i++) {
             BigInteger bSqrt = Utils.calculateSquareRoot(b);
             if (bSqrt.pow(2).compareTo(b) == 0) {
-                BigInteger p = a.subtract(b);
-                BigInteger q = a.add(b);
+                BigInteger p = a.subtract(bSqrt);
+                BigInteger q = a.add(bSqrt);
                 return LintResult.of(Status.ERROR, String.format("public modulus n = pq factored into p: %s; q: %s", p.toString(), q.toString()));
             }
 

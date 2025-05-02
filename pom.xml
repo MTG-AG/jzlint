@@ -17,6 +17,7 @@
         <module>jlint-ocsp</module>
         <module>jzlint</module>
         <module>jzlint-ca</module>
+        <module>jlint-pqc</module>
         <module>jzlint-cli</module>
         <module>jzlint-server</module>
     </modules>
@@ -50,22 +51,22 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
-        <maven-gpg-plugin.version>3.2.6</maven-gpg-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.10.0</maven-javadoc-plugin.version>
-        <spring-boot-maven-plugin.version>3.3.4</spring-boot-maven-plugin.version>
+        <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+        <spring-boot-maven-plugin.version>3.4.5</spring-boot-maven-plugin.version>
 
-        <bcprov.version>1.78.1</bcprov.version>
-        <picocli.version>4.7.6</picocli.version>
-        <jackson-core.version>2.17.2</jackson-core.version>
-        <junit-jupiter-api.version>5.11.1</junit-jupiter-api.version>
-        <mockito-core.version>5.13.0</mockito-core.version>
+        <bcprov.version>1.80</bcprov.version>
+        <picocli.version>4.7.7</picocli.version>
+        <jackson-core.version>2.19.0</jackson-core.version>
+        <junit-jupiter-api.version>5.12.2</junit-jupiter-api.version>
+        <mockito-core.version>5.17.0</mockito-core.version>
         <ipaddress.version>5.5.1</ipaddress.version>
-        <spring-web.version>6.1.13</spring-web.version>
-        <spring-boot.version>3.3.4</spring-boot.version>
+        <spring-web.version>6.2.6</spring-web.version>
+        <spring-boot.version>3.4.5</spring-boot.version>
 
     </properties>
 
