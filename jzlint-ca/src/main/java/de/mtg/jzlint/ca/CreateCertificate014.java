@@ -57,7 +57,6 @@ public class CreateCertificate014 {
 
         SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfo.getInstance(keyPairGenerator.generateKeyPair().getPublic().getEncoded());
 
-
         StringBuilder zlintTestVectors = new StringBuilder();
 
         {
