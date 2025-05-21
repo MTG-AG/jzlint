@@ -21,12 +21,12 @@ import de.mtg.jzlint.utils.ASN1CertificateUtils;
 import de.mtg.jzlint.utils.Utils;
 
 @Lint(
-        name = "e_ml_dsa_ee_public_key_aid_encoding",
+        name = "e_ml_dsa_public_key_aid_encoding",
         description = "The algorithm identifier in the public key of a certificate with an ML-DSA public key must have the correct encoding.",
         citation = "Internet X.509 Public Key Infrastructure: Algorithm Identifiers for ML-DSA, https://www.ietf.org/archive/id/draft-ietf-lamps-dilithium-certificates-04.txt",
         source = Source.PQC,
         effectiveDate = EffectiveDate.ZERO)
-public class MlDsaEEPublicKeyAidEncoding implements JavaLint {
+public class MlDsaPublicKeyAidEncoding implements JavaLint {
 
     @Override
     public LintResult execute(X509Certificate certificate) {
@@ -34,10 +34,7 @@ public class MlDsaEEPublicKeyAidEncoding implements JavaLint {
         final List<String> acceptedMLDSAPublicKeyAlgIDEncodings = Arrays.asList(
                 "300b0609608648016503040311", //ID_ML_DSA_44
                 "300b0609608648016503040312", //ID_ML_DSA_65
-                "300b0609608648016503040313", //ID_ML_DSA_87
-                "300b0609608648016503040320", //ID_HASH_ML_DSA_44
-                "300b0609608648016503040321", //ID_HASH_ML_DSA_65
-                "300b0609608648016503040322" //ID_HASH_ML_DSA_87
+                "300b0609608648016503040313" //ID_ML_DSA_87
         );
 
         try {
@@ -54,7 +51,7 @@ public class MlDsaEEPublicKeyAidEncoding implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return PQCUtils.isPublicKeyMLDSA(certificate) && Utils.isSubscriberCert(certificate);
+        return PQCUtils.isPublicKeyMLDSA(certificate);
     }
 
 }

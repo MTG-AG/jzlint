@@ -5,10 +5,16 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
 
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.DERNull;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.Extensions;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.asn1.x509.V3TBSCertificateGenerator;
 import org.junit.jupiter.api.Test;
@@ -19,12 +25,10 @@ import de.mtg.jlint.pqc.util.PQCUtils;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Status;
 
-class MlDsaEePublicKeyAidEncodingTest {
+class MlDsaPublicKeyAidEncodingTest {
 
     @RegisterExtension
     static PQCCAExtension pqccaExtension = new PQCCAExtension();
-
-    private static final MlDsaEEPublicKeyAidEncoding LINT = new MlDsaEEPublicKeyAidEncoding();
 
     @Test
     void passTest() throws Exception {
@@ -38,19 +42,23 @@ class MlDsaEePublicKeyAidEncodingTest {
         X500Name subjectDN = new X500Name("CN=PQC Certificate, C=DE");
         AlgorithmIdentifier signatureAID = new AlgorithmIdentifier(PQCUtils.ID_ML_DSA_65);
 
+        BasicConstraints basicConstraints = new BasicConstraints(true);
+        Extension bc = new Extension(Extension.basicConstraints, true, basicConstraints.toASN1Primitive().getEncoded(ASN1Encoding.DER));
+        Optional<Extensions> extensions = PQCCAExtension.createExtensions(Arrays.asList(bc));
+
         V3TBSCertificateGenerator tbsCertificateGenerator = PQCCAExtension.getV3TBSCertificateGenerator(
-                publicKey, signatureAID, notBefore, notAfter, BigInteger.ONE, issuerDN, subjectDN, null);
+                publicKey, signatureAID, notBefore, notAfter, BigInteger.ONE, issuerDN, subjectDN, extensions.orElse(null));
 
         X509Certificate certificate = PQCCAExtension.createCertificate(privateKey,
                 PQCUtils.ID_ML_DSA_65.getId(), signatureAID, tbsCertificateGenerator.generateTBSCertificate());
 
-        pqccaExtension.assertLintResult(LintResult.of(Status.PASS), LINT, certificate);
+        pqccaExtension.assertLintResult(LintResult.of(Status.PASS), new MlDsaPublicKeyAidEncoding(), certificate);
     }
 
     @Test
     void naTest() throws Exception {
         X509Certificate certificate = PQCCAExtension.createECCertificate();
-        pqccaExtension.assertLintResult(LintResult.of(Status.NA), LINT, certificate);
+        pqccaExtension.assertLintResult(LintResult.of(Status.NA), new MlDsaPublicKeyAidEncoding(), certificate);
     }
 
     @Test
@@ -67,14 +75,17 @@ class MlDsaEePublicKeyAidEncodingTest {
         AlgorithmIdentifier publicKeyAID = new AlgorithmIdentifier(PQCUtils.ID_ML_DSA_65, DERNull.INSTANCE);
         SubjectPublicKeyInfo wrongSPKI = new SubjectPublicKeyInfo(publicKeyAID, correctSPKI.getPublicKeyData());
         AlgorithmIdentifier signatureAID = new AlgorithmIdentifier(PQCUtils.ID_ML_DSA_65);
+        BasicConstraints basicConstraints = new BasicConstraints(true);
+        Extension bc = new Extension(Extension.basicConstraints, true, basicConstraints.toASN1Primitive().getEncoded(ASN1Encoding.DER));
+        Optional<Extensions> extensions = PQCCAExtension.createExtensions(Arrays.asList(bc));
 
         V3TBSCertificateGenerator tbsCertificateGenerator = PQCCAExtension.getV3TBSCertificateGenerator(
-                wrongSPKI, signatureAID, notBefore, notAfter, BigInteger.ONE, issuerDN, subjectDN, null);
+                wrongSPKI, signatureAID, notBefore, notAfter, BigInteger.ONE, issuerDN, subjectDN, extensions.orElse(null));
 
         X509Certificate certificate = PQCCAExtension.createCertificate(privateKey,
                 PQCUtils.ID_ML_DSA_65.getId(), signatureAID, tbsCertificateGenerator.generateTBSCertificate());
 
-        pqccaExtension.assertLintResult(LintResult.of(Status.ERROR), LINT, certificate);
+        pqccaExtension.assertLintResult(LintResult.of(Status.ERROR), new MlDsaPublicKeyAidEncoding(), certificate);
     }
 
 }
