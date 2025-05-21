@@ -82,6 +82,10 @@ public final class PQCUtils {
     public static ASN1ObjectIdentifier ID_ML_DSA_65 = NISTObjectIdentifiers.id_ml_dsa_65;
     public static ASN1ObjectIdentifier ID_ML_DSA_87 = NISTObjectIdentifiers.id_ml_dsa_87;
 
+    public static ASN1ObjectIdentifier ID_HASH_ML_DSA_44 = NISTObjectIdentifiers.id_hash_ml_dsa_44_with_sha512;
+    public static ASN1ObjectIdentifier ID_HASH_ML_DSA_65 = NISTObjectIdentifiers.id_hash_ml_dsa_65_with_sha512;
+    public static ASN1ObjectIdentifier ID_HASH_ML_DSA_87 = NISTObjectIdentifiers.id_hash_ml_dsa_87_with_sha512;
+
     public static ASN1ObjectIdentifier ID_ALG_KYBER_512 = NISTObjectIdentifiers.id_alg_ml_kem_512;
     public static ASN1ObjectIdentifier ID_ALG_KYBER_768 = NISTObjectIdentifiers.id_alg_ml_kem_768;
     public static ASN1ObjectIdentifier ID_ALG_KYBER_1024 = NISTObjectIdentifiers.id_alg_ml_kem_1024;

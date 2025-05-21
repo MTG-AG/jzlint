@@ -19,10 +19,12 @@ import de.mtg.jlint.pqc.util.PQCUtils;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Status;
 
-class MlDsaPublicKeyAidEncodingTest {
+class MlDsaEePublicKeyAidEncodingTest {
 
     @RegisterExtension
     static PQCCAExtension pqccaExtension = new PQCCAExtension();
+
+    private static final MlDsaEEPublicKeyAidEncoding LINT = new MlDsaEEPublicKeyAidEncoding();
 
     @Test
     void passTest() throws Exception {
@@ -42,13 +44,13 @@ class MlDsaPublicKeyAidEncodingTest {
         X509Certificate certificate = PQCCAExtension.createCertificate(privateKey,
                 PQCUtils.ID_ML_DSA_65.getId(), signatureAID, tbsCertificateGenerator.generateTBSCertificate());
 
-        pqccaExtension.assertLintResult(LintResult.of(Status.PASS), new MlDsaPublicKeyAidEncoding(), certificate);
+        pqccaExtension.assertLintResult(LintResult.of(Status.PASS), LINT, certificate);
     }
 
     @Test
     void naTest() throws Exception {
         X509Certificate certificate = PQCCAExtension.createECCertificate();
-        pqccaExtension.assertLintResult(LintResult.of(Status.NA), new MlDsaPublicKeyAidEncoding(), certificate);
+        pqccaExtension.assertLintResult(LintResult.of(Status.NA), LINT, certificate);
     }
 
     @Test
@@ -72,7 +74,7 @@ class MlDsaPublicKeyAidEncodingTest {
         X509Certificate certificate = PQCCAExtension.createCertificate(privateKey,
                 PQCUtils.ID_ML_DSA_65.getId(), signatureAID, tbsCertificateGenerator.generateTBSCertificate());
 
-        pqccaExtension.assertLintResult(LintResult.of(Status.ERROR), new MlDsaPublicKeyAidEncoding(), certificate);
+        pqccaExtension.assertLintResult(LintResult.of(Status.ERROR), LINT, certificate);
     }
 
 }

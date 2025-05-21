@@ -39,7 +39,6 @@ public class ExternalLintUtils {
 
         Properties properties = new Properties();
 
-
         try (FileInputStream fis = new FileInputStream(JZLINT_PROPERTIES)) {
             properties.load(fis);
         } catch (IOException ioException) {

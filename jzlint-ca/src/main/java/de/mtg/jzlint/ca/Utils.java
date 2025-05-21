@@ -1,6 +1,3 @@
-/*
- * Copyright (c) MTG AG
- */
 package de.mtg.jzlint.ca;
 
 import java.io.IOException;
@@ -29,15 +26,17 @@ public final class Utils {
 
         zlintTestVectors.append("{");
         zlintTestVectors.append(System.lineSeparator());
-        zlintTestVectors.append("Name: ");
+        zlintTestVectors.append("Name: \"");
         zlintTestVectors.append(description);
+        zlintTestVectors.append("\",");
         zlintTestVectors.append(System.lineSeparator());
         zlintTestVectors.append("InputFilename: \"");
         zlintTestVectors.append(namePEM);
-        zlintTestVectors.append("\"");
+        zlintTestVectors.append("\",");
         zlintTestVectors.append(System.lineSeparator());
         zlintTestVectors.append("ExpectedResult: lint.");
         zlintTestVectors.append(lintResult);
+        zlintTestVectors.append(",");
         zlintTestVectors.append(System.lineSeparator());
         zlintTestVectors.append("},");
         zlintTestVectors.append(System.lineSeparator());
