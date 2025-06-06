@@ -11,8 +11,6 @@ import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
 
-// Covers also e_ml_kem_ek_seed_length, e_ml_kem_ek_matrix_dimension, e_ml_kem_ek_vector_dimension
-// e_ml_kem_ek_matrix_entries, e_ml_kem_ek_vector_entries
 @Lint(
         name = "e_ml_kem_ek_length",
         description = "An encoded ML-KEM encapsulation key must be of the correct length.",
