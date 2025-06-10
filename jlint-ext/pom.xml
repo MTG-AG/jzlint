@@ -6,6 +6,7 @@
 
     <groupId>de.mtg</groupId>
     <artifactId>jlint-ext</artifactId>
+    <name>jlint-ext</name>
     <version>2.0.0</version>
     <description>Additional lints for certificates and revocation lists.</description>
     <url>https://github.com/MTG-AG/jzlint</url>
