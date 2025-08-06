@@ -17,7 +17,8 @@ public enum Source {
     ETSI_ESI("ETSI_ESI"),
     CABF_SMIME_BASELINE_REQUIREMENTS("CABF_SMIME"),
     CABF_CODE_SIGNING_BASELINE_REQUIREMENTS("CABF_CS"),
-    PQC("PQC");
+    PQC("PQC"),
+    SM_PKI("SM_PKI");
 
     private final String sourceName;
 

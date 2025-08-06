@@ -1,0 +1,257 @@
+package de.mtg.jlint.smpki.util;
+
+import java.security.cert.X509Certificate;
+import java.util.Optional;
+
+import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.X509ObjectIdentifiers;
+
+import de.mtg.jzlint.utils.Utils;
+
+
+/**
+ * Utility class providing helper methods for processing structures of the smart meter PKI.
+ * <p></p>
+ * Relevant specifications:
+ * <p></p>
+ * <a
+ * href="https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Publikationen/TechnischeRichtlinien/TR03109/PKI_Certificate_Policy.pdf?__blob=publicationFile&v=8">Certificate
+ * Policy der Smart Metering PKI Version 1.1.2, 25.01.2023</a>
+ */
+public final class SMPKIUtils {
+
+    public static boolean isSMPKICertificate(X509Certificate certificate) {
+        return isSMPKIEnduserCertificate(certificate) ||
+                isSMPKIRootTls(certificate) ||
+                isSMPKIRootCrlSigner(certificate) ||
+                isSMPKIRootTlsSigner(certificate) ||
+                isSMPKISubCA(certificate) ||
+                isSMPKIRoot(certificate);
+    }
+
+    public static boolean isSMPKIEnduserCertificate(X509Certificate certificate) {
+        return isSMGWCertificate(certificate) ||
+                isEMTCertificate(certificate) ||
+                isGWHCertificate(certificate) ||
+                isGWACertificate(certificate);
+    }
+
+    public static boolean isGWACertificate(X509Certificate certificate) {
+        return getSMPKICommonName(certificate, "GWA").isPresent();
+    }
+
+    public static boolean isGWHCertificate(X509Certificate certificate) {
+        return getSMPKICommonName(certificate, "GWH").isPresent();
+    }
+
+    public static boolean isEMTCertificate(X509Certificate certificate) {
+        return getSMPKICommonName(certificate, "EMT").isPresent();
+    }
+
+    public static boolean isSMGWCertificate(X509Certificate certificate) {
+        return getSMPKICommonName(certificate, "SMGW").isPresent();
+    }
+
+    public static boolean isSMPKIRoot(X509Certificate certificate) {
+        if (!isSMPKIOrganization(certificate)) {
+            return false;
+        }
+
+        if (!containsCorrectSerialNumber(certificate)) {
+            return false;
+        }
+
+        if (!isCountry(certificate, "DE")) {
+            return false;
+        }
+
+        return isCommonName(certificate, "SM-Root.CA") || isCommonName(certificate, "SM-Test-Root.CA");
+    }
+
+    public static boolean isSMPKIRootCrlSigner(X509Certificate certificate) {
+        if (!isSMPKIOrganization(certificate)) {
+            return false;
+        }
+
+        if (!isCountry(certificate, "DE")) {
+            return false;
+        }
+
+        return isCommonName(certificate, "SM-Root.CA.CRL-S") || isCommonName(certificate, "SM-Test-Root.CA.CRL-S");
+    }
+
+    public static boolean isSMPKIRootTlsSigner(X509Certificate certificate) {
+        if (!isSMPKIOrganization(certificate)) {
+            return false;
+        }
+
+        if (!isCountry(certificate, "DE")) {
+            return false;
+        }
+
+        if (!containsCorrectSerialNumber(certificate)) {
+            return false;
+        }
+
+        return isCommonName(certificate, "SM-Root.CA.TLS-S") || isCommonName(certificate, "SM-Test-Root.CA.TLS-S");
+    }
+
+    public static boolean isSMPKIRootTls(X509Certificate certificate) {
+        if (!isSMPKIOrganization(certificate)) {
+            return false;
+        }
+
+        if (!isCountry(certificate, "DE")) {
+            return false;
+        }
+
+        if (!containsCorrectSerialNumber(certificate)) {
+            return false;
+        }
+
+        return isCommonName(certificate, "SM-Root.CA.TLS") || isCommonName(certificate, "SM-Test-Root.CA.TLS");
+    }
+
+
+    public static boolean isSMPKISubCA(X509Certificate certificate) {
+        if (!isSMPKIOrganization(certificate)) {
+            return false;
+        }
+
+        if (!hasCountry(certificate)) {
+            return false;
+        }
+
+        if (!containsCorrectSerialNumber(certificate)) {
+            return false;
+        }
+
+        return endsWithCommonName(certificate, ".CA");
+    }
+
+    private static Optional<String> getSMPKICommonName(X509Certificate certificate, String expected) {
+
+        if (!isSMPKIOrganization(certificate)) {
+            return Optional.empty();
+        }
+
+        var commonName = Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.commonName.getId());
+
+        if (Utils.componentNameIsEmpty(commonName)) {
+            return Optional.empty();
+        }
+
+        if (commonName.size() != 1) {
+            return Optional.empty();
+        }
+
+        var commonNameValue = commonName.get(0).getValue().toString();
+
+        if (commonNameValue.endsWith(".%s".formatted(expected))) {
+            return Optional.of(commonNameValue);
+        } else if (commonNameValue.contains(".%s.".formatted(expected))) {
+            return Optional.of(commonNameValue);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private static boolean isSMPKIOrganization(X509Certificate certificate) {
+        var organization = Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.organization.getId());
+
+        if (Utils.componentNameIsEmpty(organization)) {
+            return false;
+        }
+
+        if (organization.size() != 1) {
+            return false;
+        }
+
+        var organizationValue = organization.get(0).getValue().toString();
+
+
+        if ("SM-PKI-DE".equals(organizationValue)) {
+            return true;
+        }
+        if ("SM-Test-PKI-DE".equals(organizationValue)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean containsCorrectSerialNumber(X509Certificate certificate) {
+
+        var serialNumber = Utils.getSubjectDNNameComponent(certificate, BCStyle.SERIALNUMBER.getId());
+
+        if (Utils.componentNameIsEmpty(serialNumber)) {
+            return false;
+        }
+
+        if (serialNumber.size() != 1) {
+            return false;
+        }
+
+        var serialNumberValue = serialNumber.get(0).getValue().toString();
+        return serialNumberValue.matches("\\d+");
+    }
+
+    private static boolean isCountry(X509Certificate certificate, String expectedCountryCode) {
+
+        var country = Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.countryName.getId());
+
+        if (Utils.componentNameIsEmpty(country)) {
+            return false;
+        }
+
+        if (country.size() != 1) {
+            return false;
+        }
+
+        return expectedCountryCode.equals(country.get(0).getValue().toString());
+    }
+
+    private static boolean hasCountry(X509Certificate certificate) {
+
+        var country = Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.countryName.getId());
+
+        if (Utils.componentNameIsEmpty(country)) {
+            return false;
+        }
+
+        return country.size() == 1;
+    }
+
+    private static boolean isCommonName(X509Certificate certificate, String expectedValue) {
+        var commonName = Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.commonName.getId());
+
+        if (Utils.componentNameIsEmpty(commonName)) {
+            return false;
+        }
+
+        if (commonName.size() != 1) {
+            return false;
+        }
+
+        var commonNameValue = commonName.get(0).getValue().toString();
+
+        return expectedValue.equals(commonNameValue);
+    }
+
+
+    private static boolean endsWithCommonName(X509Certificate certificate, String expectedValue) {
+        var commonName = Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.commonName.getId());
+
+        if (Utils.componentNameIsEmpty(commonName)) {
+            return false;
+        }
+
+        if (commonName.size() != 1) {
+            return false;
+        }
+
+        var commonNameValue = commonName.get(0).getValue().toString();
+
+        return expectedValue.endsWith(commonNameValue);
+    }
+
+}
