@@ -49,7 +49,7 @@ public class SmpkiEnduserExtensionPresent implements JavaLint {
         }
 
         hasExtension = Utils.hasCertificatePoliciesExtension(certificate);
-        if (hasExtension) {
+        if (!hasExtension) {
             return LintResult.of(Status.ERROR,
                     "Certificate is an SM-PKI enduser certificate, but does not have the certificate policies extension.");
         }

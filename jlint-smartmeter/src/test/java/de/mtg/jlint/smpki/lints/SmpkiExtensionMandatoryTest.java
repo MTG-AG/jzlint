@@ -127,6 +127,8 @@ class SmpkiExtensionMandatoryTest {
         var crlDistributionPoint = new CRLDistPoint(distributionPoints);
         var crldp = new Extension(Extension.cRLDistributionPoints, false, crlDistributionPoint.toASN1Primitive().getEncoded(ASN1Encoding.DER));
 
+        Extension certificatePolicies = CAExtension.getCertificatePolicies("0.4.0.127.0.7.3.4.1.1.1");
+
         var certificateBuilder =
                 new X509v3CertificateBuilder(issuerDN, serialNumber, notBeforeDate, noteAfterDate, certificateSubjectDN, subjectPublicKeyInfo);
         certificateBuilder.addExtension(akie);
@@ -136,6 +138,7 @@ class SmpkiExtensionMandatoryTest {
         certificateBuilder.addExtension(ian);
         certificateBuilder.addExtension(san);
         certificateBuilder.addExtension(crldp);
+        certificateBuilder.addExtension(certificatePolicies);
         var contentSigner =
                 new JcaContentSignerBuilder(CAExtension.SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME)
                         .build(caPrivateKey);

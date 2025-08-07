@@ -1,9 +1,16 @@
 package de.mtg.jlint.smpki.util;
 
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Predicate;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.CertificatePolicies;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.X509ObjectIdentifiers;
 
 import de.mtg.jzlint.utils.Utils;
@@ -17,6 +24,10 @@ import de.mtg.jzlint.utils.Utils;
  * <a
  * href="https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Publikationen/TechnischeRichtlinien/TR03109/PKI_Certificate_Policy.pdf?__blob=publicationFile&v=8">Certificate
  * Policy der Smart Metering PKI Version 1.1.2, 25.01.2023</a>
+ * <p></p>
+ * <a
+ * href="https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Publikationen/TechnischeRichtlinien/TR03109/TR-03109-4_PKI.pdf?__blob=publicationFile&v=3">Smart Metering PKI - Public Key Infrastruktur für Smart Meter Gateways Version 1.2.1, 09.08.2017</a>
+ *
  */
 public final class SMPKIUtils {
 
@@ -37,22 +48,27 @@ public final class SMPKIUtils {
     }
 
     public static boolean isGWACertificate(X509Certificate certificate) {
-        return getSMPKICommonName(certificate, "GWA").isPresent();
+        return hasSMPKIPolicy(certificate) && getSMPKICommonName(certificate, "GWA").isPresent();
     }
 
     public static boolean isGWHCertificate(X509Certificate certificate) {
-        return getSMPKICommonName(certificate, "GWH").isPresent();
+        return hasSMPKIPolicy(certificate) && getSMPKICommonName(certificate, "GWH").isPresent();
     }
 
     public static boolean isEMTCertificate(X509Certificate certificate) {
-        return getSMPKICommonName(certificate, "EMT").isPresent();
+        return hasSMPKIPolicy(certificate) && getSMPKICommonName(certificate, "EMT").isPresent();
     }
 
     public static boolean isSMGWCertificate(X509Certificate certificate) {
-        return getSMPKICommonName(certificate, "SMGW").isPresent();
+        return hasSMPKIPolicy(certificate) && getSMPKICommonName(certificate, "SMGW").isPresent();
     }
 
     public static boolean isSMPKIRoot(X509Certificate certificate) {
+
+        if (!hasSMPKIPolicy(certificate)) {
+            return false;
+        }
+
         if (!isSMPKIOrganization(certificate)) {
             return false;
         }
@@ -69,6 +85,11 @@ public final class SMPKIUtils {
     }
 
     public static boolean isSMPKIRootCrlSigner(X509Certificate certificate) {
+
+        if (!hasSMPKIPolicy(certificate)) {
+            return false;
+        }
+
         if (!isSMPKIOrganization(certificate)) {
             return false;
         }
@@ -81,6 +102,11 @@ public final class SMPKIUtils {
     }
 
     public static boolean isSMPKIRootTlsSigner(X509Certificate certificate) {
+
+        if (!hasSMPKIPolicy(certificate)) {
+            return false;
+        }
+
         if (!isSMPKIOrganization(certificate)) {
             return false;
         }
@@ -97,6 +123,11 @@ public final class SMPKIUtils {
     }
 
     public static boolean isSMPKIRootTls(X509Certificate certificate) {
+
+        if (!hasSMPKIPolicy(certificate)) {
+            return false;
+        }
+
         if (!isSMPKIOrganization(certificate)) {
             return false;
         }
@@ -114,6 +145,11 @@ public final class SMPKIUtils {
 
 
     public static boolean isSMPKISubCA(X509Certificate certificate) {
+
+        if (!hasSMPKIPolicy(certificate)) {
+            return false;
+        }
+
         if (!isSMPKIOrganization(certificate)) {
             return false;
         }
@@ -252,6 +288,20 @@ public final class SMPKIUtils {
         var commonNameValue = commonName.get(0).getValue().toString();
 
         return expectedValue.endsWith(commonNameValue);
+    }
+
+    private static boolean hasSMPKIPolicy(X509Certificate certificate) {
+
+        var rawCertificatePolicies = certificate.getExtensionValue(Extension.certificatePolicies.getId());
+
+        if (rawCertificatePolicies == null) {
+            return false;
+        }
+
+        var certificatePolicies = CertificatePolicies.getInstance(ASN1OctetString.getInstance(rawCertificatePolicies).getOctets());
+
+        Predicate<PolicyInformation> isSMPKIPolicy = p -> p.getPolicyIdentifier().equals(new ASN1ObjectIdentifier("0.4.0.127.0.7.3.4.1.1.1"));
+        return Arrays.stream(certificatePolicies.getPolicyInformation()).anyMatch(isSMPKIPolicy);
     }
 
 }

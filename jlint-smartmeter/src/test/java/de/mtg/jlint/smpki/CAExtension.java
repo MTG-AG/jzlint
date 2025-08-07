@@ -189,6 +189,8 @@ public class CAExtension implements BeforeAllCallback {
         CRLDistPoint crlDistributionPoint = new CRLDistPoint(distributionPoints);
         Extension crldp = new Extension(Extension.cRLDistributionPoints, false, crlDistributionPoint.toASN1Primitive().getEncoded(ASN1Encoding.DER));
 
+        Extension certificatePolicies = getCertificatePolicies("0.4.0.127.0.7.3.4.1.1.1");
+
         X509v3CertificateBuilder certificateBuilder =
                 new X509v3CertificateBuilder(caIssuerDN, serialNumber, notBeforeDate, noteAfterDate, certificateSubjectDN, subjectPublicKeyInfo);
         certificateBuilder.addExtension(akie);
@@ -199,6 +201,7 @@ public class CAExtension implements BeforeAllCallback {
         certificateBuilder.addExtension(ian);
         certificateBuilder.addExtension(san);
         certificateBuilder.addExtension(crldp);
+        certificateBuilder.addExtension(certificatePolicies);
         var contentSigner =
                 new JcaContentSignerBuilder(SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(caPrivateKey);
         var x509CertificateHolder = certificateBuilder.build(contentSigner);
