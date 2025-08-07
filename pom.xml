@@ -59,14 +59,14 @@
         <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
         <spring-boot-maven-plugin.version>3.4.5</spring-boot-maven-plugin.version>
 
-        <bcprov.version>1.80</bcprov.version>
+        <bcprov.version>1.81</bcprov.version>
         <picocli.version>4.7.7</picocli.version>
-        <jackson-core.version>2.19.0</jackson-core.version>
-        <junit-jupiter-api.version>5.12.2</junit-jupiter-api.version>
-        <mockito-core.version>5.17.0</mockito-core.version>
+        <jackson-core.version>2.19.2</jackson-core.version>
+        <junit-jupiter-api.version>5.13.4</junit-jupiter-api.version>
+        <mockito-core.version>5.18.0</mockito-core.version>
         <ipaddress.version>5.5.1</ipaddress.version>
-        <spring-web.version>6.2.6</spring-web.version>
-        <spring-boot.version>3.4.5</spring-boot.version>
+        <spring-web.version>6.2.9</spring-web.version>
+        <spring-boot.version>3.5.4</spring-boot.version>
 
     </properties>
 
