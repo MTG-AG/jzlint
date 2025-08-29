@@ -7,6 +7,12 @@
     <groupId>de.mtg</groupId>
     <artifactId>jzlint-parent</artifactId>
     <version>2.0.0</version>
+    <description>Parent of the linter JZLint.</description>
+    <url>https://github.com/MTG-AG/jzlint</url>
+    <organization>
+        <name>MTG AG</name>
+        <url>https://www.mtg.de</url>
+    </organization>
     <name>jzlint-parent</name>
     <packaging>pom</packaging>
 
