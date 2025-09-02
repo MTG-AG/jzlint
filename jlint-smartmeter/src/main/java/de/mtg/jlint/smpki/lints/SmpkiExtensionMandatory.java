@@ -15,7 +15,7 @@ import de.mtg.jzlint.utils.Utils;
 
 @Lint(
         name = "e_smpki_extension_mandatory",
-        description = "Certain extension must be critical and some not.",
+        description = "Certain extensions must be critical and some not.",
         citation = "Technische Richtlinie BSI TR-03109-4, Section A.2",
         source = Source.SM_PKI,
         effectiveDate = EffectiveDate.TR_03109_4_V1_2_1)

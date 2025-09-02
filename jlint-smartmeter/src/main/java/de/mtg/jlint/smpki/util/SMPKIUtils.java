@@ -205,14 +205,11 @@ public final class SMPKIUtils {
 
         var organizationValue = organization.get(0).getValue().toString();
 
-
         if ("SM-PKI-DE".equals(organizationValue)) {
             return true;
         }
-        if ("SM-Test-PKI-DE".equals(organizationValue)) {
-            return true;
-        }
-        return false;
+
+        return "SM-Test-PKI-DE".equals(organizationValue);
     }
 
     private static boolean containsCorrectSerialNumber(X509Certificate certificate) {
