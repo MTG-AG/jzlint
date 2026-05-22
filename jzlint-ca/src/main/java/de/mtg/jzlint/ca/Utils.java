@@ -43,4 +43,46 @@ public final class Utils {
 
     }
 
+
+    public static void handleIssuedCertificateMore(
+            String[] args,
+            String nameDER,
+            X509Certificate testCertificate,
+            String namePEMAddon,
+            String namePEM,
+            StringBuilder zlintTestVectors,
+            String lintResult,
+            String description)
+            throws IOException, CertificateEncodingException {
+        Files.write(Paths.get(nameDER), testCertificate.getEncoded());
+
+        System.out.printf("openssl x509 -inform DER -outform PEM -in %s -out %s -text%n", nameDER, namePEM);
+
+
+        if (args != null && args.length > 0) {
+            System.out.printf("cp %s %s%n", namePEM, args[0]);
+        }
+
+        zlintTestVectors.append("{");
+        zlintTestVectors.append(System.lineSeparator());
+        zlintTestVectors.append("Name: \"");
+        zlintTestVectors.append(description);
+        zlintTestVectors.append("\",");
+        zlintTestVectors.append(System.lineSeparator());
+        zlintTestVectors.append("InputFilename: \"");
+        if (namePEMAddon != null) {
+            zlintTestVectors.append(namePEMAddon);
+        }
+        zlintTestVectors.append(namePEM);
+        zlintTestVectors.append("\",");
+        zlintTestVectors.append(System.lineSeparator());
+        zlintTestVectors.append("ExpectedResult: lint.");
+        zlintTestVectors.append(lintResult);
+        zlintTestVectors.append(",");
+        zlintTestVectors.append(System.lineSeparator());
+        zlintTestVectors.append("},");
+        zlintTestVectors.append(System.lineSeparator());
+
+    }
+
 }
